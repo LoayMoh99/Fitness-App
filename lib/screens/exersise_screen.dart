@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitness_app/utils/excersise_hub.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +9,17 @@ class ExersiseScreen extends StatefulWidget {
   final Exercises exercises;
   final int seconds;
 
-  const ExersiseScreen({@required this.exercises, @required this.seconds});
+  ExersiseScreen({@required this.exercises, @required this.seconds});
   @override
   _ExersiseScreenState createState() => _ExersiseScreenState();
 }
 
 class _ExersiseScreenState extends State<ExersiseScreen> {
-  bool _isChecked = false;
+  bool _isChecked =
+      false; //helps to detect if the specific time is done or not yet..
   int _elapsedSeconds = 0;
 
   Timer timer;
-
-  AudioPlayer audioPlayer = AudioPlayer();
   AudioCache audioCache = AudioCache();
 
   void playAudio() {
@@ -30,6 +28,7 @@ class _ExersiseScreenState extends State<ExersiseScreen> {
 
   @override
   void initState() {
+    super.initState();
     timer = Timer.periodic(
       Duration(seconds: 1),
       (t) {
@@ -46,7 +45,6 @@ class _ExersiseScreenState extends State<ExersiseScreen> {
         }
       },
     );
-    super.initState();
   }
 
   @override
@@ -57,47 +55,63 @@ class _ExersiseScreenState extends State<ExersiseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Center(
-          child: Container(
-            child: CachedNetworkImage(
-              imageUrl: widget.exercises.gif,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Image(
-                image: AssetImage('assets/placeholder.jpg'),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+    return Material(
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Container(
+              child: CachedNetworkImage(
+                imageUrl: widget.exercises.gif,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => Image(
+                  image: AssetImage('assets/placeholder.jpg'),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  fit: BoxFit.cover,
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
-        ),
-        (_isChecked)
-            ? SafeArea(
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    '$_elapsedSeconds / ${widget.seconds} sec',
-                    style: TextStyle(
-                      fontSize: 40,
+          SafeArea(
+            child: (!_isChecked)
+                ? Container(
+                    padding: const EdgeInsets.only(top: 25),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      '$_elapsedSeconds / ${widget.seconds} sec',
+                      style: TextStyle(
+                        fontSize: 40,
+                      ),
+                    ),
+                  )
+                : Container(
+                    padding: const EdgeInsets.only(top: 25),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.pink,
+                        child: Text(
+                          'Done!',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              )
-            : Container(),
-        SafeArea(
-          child: Container(
-            child: IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
+          ),
+          SafeArea(
+            child: Container(
+              child: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

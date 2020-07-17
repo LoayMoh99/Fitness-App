@@ -14,10 +14,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final String apiURL =
       "https://raw.githubusercontent.com/codeifitech/fitness-app/master/exercises.json";
-
+  //detect if there is network or no..
   bool noNetwork = false;
   Future<ExcersiseHub> _getExcersises() async {
-    var response = await http.get(apiURL);
+    var response;
+    try {
+      response = await http.get(apiURL);
+    } catch (e) {
+      return null;
+    }
     var bodyResponse = response.body;
     var decodedJson = jsonDecode(bodyResponse);
     return ExcersiseHub.fromJson(decodedJson);
@@ -26,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget listExercises(ExcersiseHub excersiseHub) {
     return ListView(
       children: excersiseHub.exercises.map((e) {
-        return InkWell(
+        return GestureDetector(
           onTap: () {
             Navigator.push(
               context,
@@ -115,19 +120,35 @@ class _HomeScreenState extends State<HomeScreen> {
       body: FutureBuilder<ExcersiseHub>(
         future: _getExcersises(),
         builder: (context, snapshot) {
-          if (snapshot.error == true) {
+          print(snapshot);
+          if (snapshot.error == true || snapshot.data == null) {
+            //if no internet or there is an error..
             return Center(
-              child: Text('Error'),
+              child: Text(
+                'Error\nNo Internet!',
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+              ),
             );
           } else {
             if (snapshot.connectionState == ConnectionState.done)
-              return listExercises(snapshot.data);
+              return Material(
+                child: listExercises(snapshot.data),
+              );
             else if (snapshot.connectionState == ConnectionState.waiting)
               return Center(
                 child: CircularProgressIndicator(),
               );
             else
-              return Text('Unexpected');
+              return Center(
+                child: Text(
+                  'Unexpected!',
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              );
           }
         },
       ),

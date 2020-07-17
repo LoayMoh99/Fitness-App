@@ -19,6 +19,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       fontSize: 36,
     ),
   );
+
+  ///these are the 3 pages details
   var pages = [
     PageViewModel(
       title: "Wanna Be Fit??",
@@ -52,6 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue,
+      //introduction screen plugin..
       body: IntroductionScreen(
         pages: pages,
         onDone: () {

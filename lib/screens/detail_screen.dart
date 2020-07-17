@@ -51,33 +51,26 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
             Center(
-              child: InkWell(
-                splashColor: Colors.black54,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return ExersiseScreen(
-                        exercises: widget.exercises,
-                        seconds: seconds,
-                      );
-                    }),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.redAccent[400],
+              child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Start Excersise',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
+                  color: Colors.pink,
+                  child: Text(
+                    'Start Excersise',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                ),
-              ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ExersiseScreen(
+                          exercises: widget.exercises,
+                          seconds: seconds,
+                        );
+                      }),
+                    );
+                  }),
             ),
             Positioned(
               bottom: 20,
