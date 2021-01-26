@@ -80,13 +80,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               fontWeight: FontWeight.w600, color: Colors.white, fontSize: 20),
         ),
         dotsDecorator: DotsDecorator(
-            size: const Size.square(10.0),
-            activeSize: const Size(20.0, 10.0),
-            activeColor: Colors.deepOrange,
-            color: Colors.white60,
-            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0))),
+          size: const Size.square(10.0),
+          activeSize: const Size(20.0, 10.0),
+          activeColor: Colors.deepOrange,
+          color: Colors.white60,
+          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+          activeShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+        ),
       ),
     );
   }
